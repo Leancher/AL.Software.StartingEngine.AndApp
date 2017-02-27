@@ -18,10 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import static Config.Config.CAMMAND_STOP;
+import static Config.Config.COMMAND_PARAM;
 import static Config.Config.COMMAND_START_10;
 import static Config.Config.COMMAND_START_20;
-import static Config.Config.COMMAND_TEMP;
-import static Config.Config.COMMAND_VOLTAGE;
 import static Config.Config.PHONE_NUMBER;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
     int current_state=0;
     String txtMessage = "";
 
-    Button btVoltage,btTempEng,btTempCabine,btStart10,btStart15,btStart20;
-    String phone,message;
+    Button btParam,btStart10,btStart15,btStart20;
+    String phone,message,btParamText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,16 +48,10 @@ public class MainActivity extends AppCompatActivity {
         CheckButtonClick();
     }
     private void CheckButtonClick(){
-        btVoltage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SendCommand(COMMAND_VOLTAGE);
-            }
-        });
-        btTempEng.setOnClickListener(new View.OnClickListener() {
+        btParam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SendCommand(COMMAND_TEMP);
+                SendCommand(COMMAND_PARAM);
             }
         });
         btStart10.setOnClickListener(new View.OnClickListener() {
@@ -92,9 +85,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void InitLayout(){
-        btVoltage=(Button) findViewById(R.id.btVoltage);
-        btTempEng=(Button) findViewById(R.id.btTempEng);
-        btTempCabine=(Button) findViewById(R.id.btTempCabine);
+        btParam=(Button) findViewById(R.id.btParam);
         btStart10=(Button) findViewById(R.id.btStart10);
         btStart15=(Button) findViewById(R.id.btStart15);
         btStart20=(Button) findViewById(R.id.btStart20);
@@ -175,7 +166,23 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void process_receive_sms(){
-        switch (txtMessage){
+        String buffer="";
+        int lenghtStr=0;
+        lenghtStr=txtMessage.length();
+        boolean isContain=txtMessage.contains(";");
+        if (isContain){
+            int numberSymbol1=txtMessage.indexOf(";");
+            buffer=txtMessage.substring(0,numberSymbol1);
+            if (buffer.equals("prm")){
+                    int numberSymbol2=txtMessage.indexOf(";",numberSymbol1+1);
+                    btParamText=txtMessage.substring(numberSymbol1+1,numberSymbol2);
+                    buffer=txtMessage.substring(numberSymbol1+1,lenghtStr);
+                    buffer=txtMessage.substring(numberSymbol2+1,lenghtStr);
+                    btParamText=btParamText+ "                        " + buffer;
+            }
+            btParam.setText(btParamText);
+        }
+/*        switch (txtMessage){
             case "OK10":
                 btStart10.setText("Двигатель запущен на 10 минут");
                 btStart15.setText("Добавить 5 минут");
@@ -194,6 +201,6 @@ public class MainActivity extends AppCompatActivity {
                 btStart20.setText("20 мин");
                 current_state=0;
                 break;
-        }
+        }*/
     }
 }
