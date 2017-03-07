@@ -7,6 +7,7 @@ public class Config {
     public static final String COMMAND_START_10 = "10";
     public static final String COMMAND_START_15 = "15";
     public static final String COMMAND_START_20 = "20";
-    public static final String CAMMAND_STOP = "05";
+    public static final String COMMAND_STOP = "05";
+    public static final String COMMAND_ADD = "02";
 
 }

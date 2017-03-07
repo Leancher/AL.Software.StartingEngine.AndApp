@@ -14,10 +14,11 @@ import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import static Config.Config.CAMMAND_STOP;
+import static Config.Config.COMMAND_ADD;
+import static Config.Config.COMMAND_START_15;
+import static Config.Config.COMMAND_STOP;
 import static Config.Config.COMMAND_PARAM;
 import static Config.Config.COMMAND_START_10;
 import static Config.Config.COMMAND_START_20;
@@ -62,6 +63,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        btStart15.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (current_state==0){
+                    SendCommand(COMMAND_START_15);
+                }
+                if (current_state==1){
+                    SendCommand(COMMAND_ADD);
+                }
+            }
+        });
         btStart20.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                     SendCommand(COMMAND_START_20);
                 }
                 if (current_state==1){
-                    SendCommand(CAMMAND_STOP);
+                    SendCommand(COMMAND_STOP);
                 }
             }
         });
@@ -167,40 +179,47 @@ public class MainActivity extends AppCompatActivity {
 
     private void process_receive_sms(){
         String buffer="";
-        int lenghtStr=0;
-        lenghtStr=txtMessage.length();
+        int numberSymbol1=0;
+        int numberSymbol2=0;
+        int lenghtStr=txtMessage.length();
         boolean isContain=txtMessage.contains(";");
         if (isContain){
-            int numberSymbol1=txtMessage.indexOf(";");
+            numberSymbol1=txtMessage.indexOf(";");
             buffer=txtMessage.substring(0,numberSymbol1);
-            if (buffer.equals("prm")){
-                    int numberSymbol2=txtMessage.indexOf(";",numberSymbol1+1);
-                    btParamText=txtMessage.substring(numberSymbol1+1,numberSymbol2);
-                    buffer=txtMessage.substring(numberSymbol1+1,lenghtStr);
-                    buffer=txtMessage.substring(numberSymbol2+1,lenghtStr);
-                    btParamText=btParamText+ "                        " + buffer;
+            if(buffer.equals("add")){
+                btStart10.setText("Двигатель работает, добавлено 5 минут");
+                btStart15.setText("Добавить 5 минут");
+                btStart20.setText("Остановить");
+                current_state=1;
             }
-            btParam.setText(btParamText);
-        }
-/*        switch (txtMessage){
-            case "OK10":
+            if(buffer.equals("stop")){
+                btStart10.setText("Запустить двигатель на 10 мин");
+                btStart15.setText("15 мин");
+                btStart20.setText("20 мин");
+                current_state=0;
+            }
+//            if (buffer.equals("prm")){
+//                numberSymbol2=txtMessage.indexOf(";",numberSymbol1+1);
+//
+//            }
+            if(buffer.equals("ok")){
                 btStart10.setText("Двигатель запущен на 10 минут");
                 btStart15.setText("Добавить 5 минут");
                 btStart20.setText("Остановить");
                 current_state=1;
-                break;
-            case "OK20":
-                btStart10.setText("Двигатель запущен на 20 минут");
-                btStart15.setText("Добавить 5 минут");
-                btStart20.setText("Остановить");
-                current_state=1;
-                break;
-            case "stop":
-                btStart10.setText("Запустить двигтаель на 10 мин");
+            }
+            if(buffer.equals("er01")){
+                btStart10.setText("Двигатель не запустился");
                 btStart15.setText("15 мин");
                 btStart20.setText("20 мин");
                 current_state=0;
-                break;
-        }*/
+            }
+            numberSymbol2=txtMessage.indexOf(";",numberSymbol1+1);
+            if (numberSymbol2==-1) return;
+            btParamText=txtMessage.substring(numberSymbol1+1,numberSymbol2);
+            buffer=txtMessage.substring(numberSymbol2+1,lenghtStr);
+            btParamText=btParamText+ "                        " + buffer;
+            btParam.setText(btParamText);
+        }
     }
 }
