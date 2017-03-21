@@ -1,8 +1,6 @@
 package com.andrew.matiz.matiz;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,11 +8,9 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.SmsManager;
-import android.telephony.SmsMessage;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import static Config.Config.COMMAND_ADD;
 import static Config.Config.COMMAND_START_15;
@@ -22,30 +18,26 @@ import static Config.Config.COMMAND_STOP;
 import static Config.Config.COMMAND_PARAM;
 import static Config.Config.COMMAND_START_10;
 import static Config.Config.COMMAND_START_20;
-import static Config.Config.PHONE_NUMBER;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
-    String SENT_SMS = "SENT_SMS";
-    String DELIVER_SMS = "DELIVER_SMS";
-    Intent sent_intent=new Intent(SENT_SMS);
-    Intent deliver_intent=new Intent(DELIVER_SMS);
-    PendingIntent sent_pi,deliver_pi;
+    final String LOG_TAG = "myLogs";
+    public final static String DATA_TO_ACTIVITY = "result";
+    public final static String COMMAND_FROM_ACTIVITY = "data";
+
+    public final static String BROADCAST_ACTION = "ServiceCoreBroadcast";
 
     int current_state=0;
-    String txtMessage = "";
 
     Button btParam,btStart10,btStart15,btStart20;
-    String phone,message,btParamText;
+    String btParamText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
         InitLayout();
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.RECEIVE_SMS,}, 0);
-        sent_pi = PendingIntent.getBroadcast(MainActivity.this,0,sent_intent,0);
-        deliver_pi = PendingIntent.getBroadcast(MainActivity.this,0,deliver_intent,0);
+
         CheckButtonClick();
     }
     private void CheckButtonClick(){
@@ -87,14 +79,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void SendCommand(String command){
-        //Toast.makeText(this,PHONE_NUMBER +" "+ command,Toast.LENGTH_LONG).show();
-        try {
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(PHONE_NUMBER, null, command, sent_pi, deliver_pi);
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
+        Intent intent;
+        // Создаем Intent для вызова сервиса,
+        // кладем туда параметр времени и код задачи
+        intent = new Intent(this, ServiceCore.class).putExtra(COMMAND_FROM_ACTIVITY, command);
+        // стартуем сервис
+        startService(intent);
     }
     private void InitLayout(){
         btParam=(Button) findViewById(R.id.btParam);
@@ -105,79 +95,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(sentReceiver, new IntentFilter(SENT_SMS));
-        registerReceiver(deliverReceiver, new IntentFilter(DELIVER_SMS));
-        IntentFilter intFilt = new IntentFilter(SMS_RECEIVED);
-        intFilt.setPriority(100);
-        registerReceiver(receiverSMS, intFilt);
+        // регистрируем (включаем) BroadcastReceiver
+        registerReceiver(broadcastService, new IntentFilter(BROADCAST_ACTION));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver(sentReceiver);
-        unregisterReceiver(deliverReceiver);
-        unregisterReceiver(receiverSMS);
     }
 
-    BroadcastReceiver sentReceiver = new BroadcastReceiver() {
+    //Создаем Broadcast для свзяи с сервисом
+    BroadcastReceiver broadcastService = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            switch (getResultCode()){
-                case Activity.RESULT_OK:
-                    Toast.makeText(context,"Sented",Toast.LENGTH_SHORT).show();
-                    break;
-                default:
-                    Toast.makeText(context,"Error sent",Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    };
-    BroadcastReceiver deliverReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (getResultCode()){
-                case Activity.RESULT_OK:
-                    Toast.makeText(context,"Delivered",Toast.LENGTH_SHORT).show();
-                    break;
-                default:
-                    Toast.makeText(context,"Error deliver",Toast.LENGTH_SHORT).show();
-                    break;
-            }
+            //Извдекаем данные из Интент по клюсевому слову
+            String dataFromService = intent.getStringExtra(DATA_TO_ACTIVITY);
+            Log.d(LOG_TAG, "onReceive: " + dataFromService);
+            processResultData(dataFromService);
         }
     };
 
-    BroadcastReceiver receiverSMS = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //Toast.makeText(context, "SMS", Toast.LENGTH_SHORT).show();
-
-
-            //if (intent.getAction().equals(SMS_RECEIVED)){
-            abortBroadcast();
-
-            Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-                Object[] pdus = (Object[]) bundle.get("pdus");
-                if (pdus.length != 0) {
-                    SmsMessage[] messages = new SmsMessage[pdus.length];
-                    StringBuilder sb = new StringBuilder();
-                    for (int i = 0; i < pdus.length; i++) {
-                        String format = bundle.getString("format");
-                        messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i], format);
-                        sb.append(messages[i].getMessageBody());
-                    }
-                    String sender = messages[0].getOriginatingAddress();
-                    txtMessage = sb.toString();
-                }
-                process_receive_sms();
-                //Toast.makeText(context, txtMessage, Toast.LENGTH_SHORT).show();
-            }
-            // }
-        }
-    };
-
-    private void process_receive_sms(){
+    private void processResultData(String txtMessage){
         String buffer="";
         int numberSymbol1=0;
         int numberSymbol2=0;
