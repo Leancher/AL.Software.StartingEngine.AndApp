@@ -22,11 +22,11 @@ public class ServiceCore extends Service {
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     String SENT_SMS = "SENT_SMS";
     String DELIVER_SMS = "DELIVER_SMS";
-    String txtMessage,txtMessageTemp1;
     Intent sent_intent=new Intent(SENT_SMS);
     Intent deliver_intent=new Intent(DELIVER_SMS);
     PendingIntent sent_pi,deliver_pi;
 
+    String txtMessage,txtMessageTemp1;
     public void onCreate() {
         super.onCreate();
         //Регистриуем Broadcast для приема СМС
@@ -34,12 +34,14 @@ public class ServiceCore extends Service {
         intFilt.setPriority(100);
         registerReceiver(receiverSMS, intFilt);
 
+        //Регистрируем Broadcast для слежения за отправкой и доставкой СМС
+        sent_pi = PendingIntent.getBroadcast(ServiceCore.this,0,sent_intent,0);
+        deliver_pi = PendingIntent.getBroadcast(ServiceCore.this,0,deliver_intent,0);
+
         registerReceiver(sentReceiver, new IntentFilter(SENT_SMS));
         registerReceiver(deliverReceiver, new IntentFilter(DELIVER_SMS));
         Log.d(LOG_TAG, "MyService onCreate");
 
-        sent_pi = PendingIntent.getBroadcast(ServiceCore.this,0,sent_intent,0);
-        deliver_pi = PendingIntent.getBroadcast(ServiceCore.this,0,deliver_intent,0);
     }
 
     public void onDestroy() {
@@ -86,10 +88,10 @@ public class ServiceCore extends Service {
         public void onReceive(Context context, Intent intent) {
             switch (getResultCode()){
                 case Activity.RESULT_OK:
-                    Toast.makeText(context,"Sented",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Запрос отправлен",Toast.LENGTH_SHORT).show();
                     break;
                 default:
-                    Toast.makeText(context,"Error sent",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Ошибка отправки",Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -99,17 +101,16 @@ public class ServiceCore extends Service {
         public void onReceive(Context context, Intent intent) {
             switch (getResultCode()){
                 case Activity.RESULT_OK:
-                    Toast.makeText(context,"Delivered",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Матиз получил запрос",Toast.LENGTH_SHORT).show();
                     break;
                 default:
-                    Toast.makeText(context,"Error deliver",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Матиз не получил запрос",Toast.LENGTH_SHORT).show();
                     break;
             }
         }
     };
     public int onStartCommand(Intent intent, int flags, int startId) {
-        //sent_pi = PendingIntent.getBroadcast(MyService.this,0,sent_intent,0);
-        //deliver_pi = PendingIntent.getBroadcast(MyService.this,0,deliver_intent,0);
+
         Log.d(LOG_TAG, "MyService onStartCommand");
         String command = intent.getStringExtra(MainActivity.COMMAND_FROM_ACTIVITY);
         Log.d(LOG_TAG, command);
@@ -129,8 +130,8 @@ public class ServiceCore extends Service {
     public void sendSMS(String command){
         try {
             SmsManager smsManager = SmsManager.getDefault();
-            //smsManager.sendTextMessage(PHONE_NUMBER, null, command, sent_pi, deliver_pi);
-            smsManager.sendTextMessage(PHONE_NUMBER, null, command, null, null);
+            smsManager.sendTextMessage(PHONE_NUMBER, null, command, sent_pi, deliver_pi);
+            //smsManager.sendTextMessage(PHONE_NUMBER, null, command, null, null);
         } catch (Exception e) {
             Log.d(LOG_TAG, e.toString());
             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
