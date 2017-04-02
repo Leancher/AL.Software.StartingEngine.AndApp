@@ -46,6 +46,9 @@ public class ServiceCore extends Service {
 
     public void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(sentReceiver);
+        unregisterReceiver(deliverReceiver);
+        unregisterReceiver(receiverSMS);
     }
 
     public IBinder onBind(Intent intent) {
@@ -112,7 +115,7 @@ public class ServiceCore extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         Log.d(LOG_TAG, "MyService onStartCommand");
-        String command = intent.getStringExtra(MainActivity.COMMAND_FROM_ACTIVITY);
+        String command = intent.getStringExtra(ActivityMain.COMMAND_FROM_ACTIVITY);
         Log.d(LOG_TAG, command);
         sendSMS(command);
         return super.onStartCommand(intent, flags, startId);
@@ -120,9 +123,9 @@ public class ServiceCore extends Service {
 
     private void sendDataToActivity(String data){
         //Созданм Интент
-        Intent intent = new Intent(MainActivity.BROADCAST_ACTION);
+        Intent intent = new Intent(ActivityMain.BROADCAST_ACTION);
         //Кладем в него данные
-        intent.putExtra(MainActivity.DATA_TO_ACTIVITY, data);
+        intent.putExtra(ActivityMain.DATA_TO_ACTIVITY, data);
         //Отправляем
         sendBroadcast(intent);
     }

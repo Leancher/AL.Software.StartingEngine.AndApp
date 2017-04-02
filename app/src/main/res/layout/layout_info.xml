@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="О ПРИЛОЖЕНИИ"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textSize="24sp"
+        android:textAlignment="center"
+        android:fontFamily="sans-serif"
+        android:typeface="normal"
+        android:textStyle="normal|bold"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:paddingTop="0dp" />
+
+    <Button
+        android:id="@+id/btOK"
+        android:layout_width="340dp"
+        android:layout_height="102dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="11dp"
+        android:background="@drawable/bt_empty_wide"
+        android:text="OK"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_marginTop="18dp"
+        android:text="Приложение для управления модулем запуска двигателя"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="24sp"
+        android:layout_alignStart="@+id/btOK"
+        android:layout_alignEnd="@+id/btOK" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Автор: Андрей"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:layout_below="@+id/textView3"
+        android:layout_alignStart="@+id/textView3"
+        android:layout_marginTop="17dp" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Версия 1, 2016-2017"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:layout_below="@+id/textView4"
+        android:layout_alignStart="@+id/textView4"
+        android:layout_marginTop="15dp" />
+</RelativeLayout>

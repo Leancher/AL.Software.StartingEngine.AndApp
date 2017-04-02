@@ -10,9 +10,9 @@ public class Config {
     public static final String COMMAND_STOP = "05";
     public static final String COMMAND_ADD = "02";
 
-    public final static String DATA_TO_ACTIVITY = "result";
-    public final static String DATA_FROM_ACTIVITY = "data";
-    public final static String SEND_COMMAND = "command";
+    public static final int REQUEST_ACTIVITY_SETTINGS = 1;
+    public static final int REQUEST_ACTIVITY_INFO = 1;
+    public static final String SETTINGS = "settings";
+    public static final String INFORM = "info";
 
-    public final static String BROADCAST_ACTION = "MyServiceBroadcast";
 }

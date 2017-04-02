@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
+    tools:context="com.andrew.matiz.matiz.ActivityMain">
+
+    <!--Рисунок положить в папку drawable-->
+
+    <Button
+        android:text="V"
+        android:layout_height="102dp"
+        android:layout_width="340dp"
+        android:id="@+id/btParam"
+        android:gravity="bottom|center"
+        android:background="@drawable/bt_param_wide"
+        android:paddingBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:textAlignment="textStart"
+        android:paddingLeft="50dp" />
+
+    <TextView
+        android:text="УПРАВЛЕНИЕ ДВИГАТЕЛЕМ"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:id="@+id/textView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textSize="24sp"
+        android:textAlignment="center"
+        android:fontFamily="sans-serif"
+        android:typeface="normal"
+        android:textStyle="normal|bold" />
+
+    <Button
+        android:text="Запустить двигатель на 10 мин"
+        android:layout_height="102dp"
+        android:id="@+id/btStart10"
+        android:background="@drawable/bt_empty_wide"
+        android:layout_marginTop="35dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="340dp" />
+
+    <Button
+        android:text="20 мин"
+        android:layout_width="102dp"
+        android:layout_height="51dp"
+        android:id="@+id/btStart20"
+        android:background="@drawable/bt_empty_low"
+        android:layout_marginTop="150dp"
+        android:layout_marginLeft="236dp" />
+
+    <Button
+        android:text="15 мин"
+        android:layout_width="102dp"
+        android:layout_height="51dp"
+        android:id="@+id/btStart15"
+        android:background="@drawable/bt_empty_low"
+        android:layout_marginTop="150dp" />
+
+    <ImageView
+        android:src="@drawable/pic_normal"
+        android:layout_height="180dp"
+        android:layout_width="180dp"
+        android:layout_above="@+id/btParam"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_height="51dp"
+        android:id="@+id/btSet"
+        android:background="@drawable/bt_set"
+        android:layout_width="51dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="51dp"
+        android:layout_height="51dp"
+        android:id="@+id/btInfo"
+        android:background="@drawable/bt_info"
+        android:layout_alignBaseline="@+id/btSet"
+        android:layout_alignBottom="@+id/btSet"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>
