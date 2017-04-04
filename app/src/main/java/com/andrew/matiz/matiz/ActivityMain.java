@@ -108,14 +108,12 @@ public class ActivityMain extends AppCompatActivity {
             Toast.makeText(ActivityMain.this, e.toString(), Toast.LENGTH_LONG).show();
         }
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+/*    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode==RESULT_OK){
 
         }
-    }
+    }*/
 
     public void SendCommand(String command){
         Intent intent;
@@ -139,13 +137,11 @@ public class ActivityMain extends AppCompatActivity {
         // регистрируем (включаем) BroadcastReceiver
         registerReceiver(broadcastService, new IntentFilter(BROADCAST_ACTION));
     }
-
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         unregisterReceiver(broadcastService);
     }
-
     //Создаем Broadcast для свзяи с сервисом
     BroadcastReceiver broadcastService = new BroadcastReceiver() {
         @Override
@@ -156,7 +152,6 @@ public class ActivityMain extends AppCompatActivity {
             processResultData(dataFromService);
         }
     };
-
     private void processResultData(String txtMessage){
         boolean isMatiz=false;
         String buffer="";

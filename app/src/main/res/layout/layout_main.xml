@@ -13,17 +13,17 @@
     <!--Рисунок положить в папку drawable-->
 
     <Button
-        android:text="V"
-        android:layout_height="102dp"
-        android:layout_width="340dp"
         android:id="@+id/btParam"
-        android:gravity="bottom|center"
-        android:background="@drawable/bt_param_wide"
-        android:paddingBottom="20dp"
+        android:layout_width="340dp"
+        android:layout_height="102dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:textAlignment="textStart"
-        android:paddingLeft="50dp" />
+        android:background="@drawable/bt_param_wide"
+        android:gravity="bottom|center"
+        android:paddingBottom="20dp"
+        android:paddingLeft="50dp"
+        android:text="V                                 C"
+        android:textAlignment="textStart" />
 
     <TextView
         android:text="УПРАВЛЕНИЕ ДВИГАТЕЛЕМ"
