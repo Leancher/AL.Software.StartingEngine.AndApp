@@ -12,16 +12,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import static Config.Config.COMMAND_ADD;
+import static Config.Config.COMMAND_START_10;
 import static Config.Config.COMMAND_START_15;
 import static Config.Config.COMMAND_STOP;
-import static Config.Config.COMMAND_PARAM;
-import static Config.Config.COMMAND_START_10;
-import static Config.Config.COMMAND_START_20;
+import static Config.Config.COMMAND_UPDATE;
+import static Config.Config.COMMAND_AUTO_START_OM;
+import static Config.Config.COMMAND_AUTO_START_OFF;
 import static Config.Config.REQUEST_ACTIVITY_INFO;
 import static Config.Config.REQUEST_ACTIVITY_SETTINGS;
+import static com.andrew.matiz.matiz.R.drawable.bt_auto_temp_off;
+import static com.andrew.matiz.matiz.R.drawable.bt_auto_temp_on;
+import static com.andrew.matiz.matiz.R.drawable.bt_empty;
+import static com.andrew.matiz.matiz.R.drawable.bt_empty_wide;
+import static com.andrew.matiz.matiz.R.drawable.bt_start_10;
+import static com.andrew.matiz.matiz.R.drawable.bt_start_15;
 
 public class ActivityMain extends AppCompatActivity {
 
@@ -32,9 +40,10 @@ public class ActivityMain extends AppCompatActivity {
     public final static String BROADCAST_ACTION = "ServiceCoreBroadcast";
 
     int current_state=0;
+    int autostart_state=0;
 
-    Button btParam,btStart10,btStart15,btStart20,btSet,btInfo;
-    String btParamText;
+    Button btUpdate,btStart10,btStart15,btSet,btInfo,btStartAuto;
+    TextView txtBat,txtInside,txtEngine;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,20 +57,24 @@ public class ActivityMain extends AppCompatActivity {
     }
     private void CheckButtonClick(){
         try {
-        btParam.setOnClickListener(new View.OnClickListener() {
+        btUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SendCommand(COMMAND_PARAM);
+                SendCommand(COMMAND_UPDATE);
             }
         });
         btStart10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (current_state==0){
-                    SendCommand(COMMAND_START_10);
-                }
+               if (current_state==0){
+                   SendCommand(COMMAND_START_10);
+               }
+               if (current_state==1){
+                   SendCommand(COMMAND_STOP);
+               }
             }
         });
+
         btStart15.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,14 +86,19 @@ public class ActivityMain extends AppCompatActivity {
                 }
             }
         });
-        btStart20.setOnClickListener(new View.OnClickListener() {
+        btStartAuto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (current_state==0){
-                    SendCommand(COMMAND_START_20);
+                if (autostart_state==0) SendCommand(COMMAND_AUTO_START_OM);
+                if (autostart_state==1) SendCommand(COMMAND_AUTO_START_OFF);
+
+                if (autostart_state==0){
+                    btStartAuto.setBackgroundResource(bt_auto_temp_on);
+                    autostart_state=1;
                 }
-                if (current_state==1){
-                    SendCommand(COMMAND_STOP);
+                else {
+                    btStartAuto.setBackgroundResource(bt_auto_temp_off);
+                    autostart_state=0;
                 }
             }
         });
@@ -124,10 +142,13 @@ public class ActivityMain extends AppCompatActivity {
         startService(intent);
     }
     private void InitLayout(){
-        btParam=(Button) findViewById(R.id.btParam);
+        txtBat=(TextView) findViewById(R.id.textBat);
+        txtEngine=(TextView) findViewById(R.id.textEngine);
+        txtInside=(TextView) findViewById(R.id.textInside);
+        btUpdate =(Button) findViewById(R.id.btUpdate);
         btStart10=(Button) findViewById(R.id.btStart10);
         btStart15=(Button) findViewById(R.id.btStart15);
-        btStart20=(Button) findViewById(R.id.btStart20);
+        btStartAuto=(Button) findViewById(R.id.btStartAuto);
         btSet=(Button) findViewById(R.id.btSet);
         btInfo=(Button) findViewById(R.id.btInfo);
     }
@@ -163,16 +184,16 @@ public class ActivityMain extends AppCompatActivity {
             numberSymbol1=txtMessage.indexOf(";");
             buffer=txtMessage.substring(0,numberSymbol1);
             if(buffer.equals("add")){
-                btStart10.setText("Двигатель работает, добавлено 5 минут");
+                btStart10.setText("Двигатель работает, добавлено 5 минут \n\n Остановить");
                 btStart15.setText("Добавить 5 минут");
-                btStart20.setText("Остановить");
                 current_state=1;
                 isMatiz=true;
             }
             if(buffer.equals("stop")){
-                btStart10.setText("Запустить двигатель на 10 мин");
-                btStart15.setText("15 мин");
-                btStart20.setText("20 мин");
+                btStart10.setBackgroundResource(bt_start_10);
+                btStart10.setText("");
+                btStart15.setBackgroundResource(bt_start_15);
+                btStart15.setText("");
                 current_state=0;
                 isMatiz=true;
             }
@@ -180,16 +201,16 @@ public class ActivityMain extends AppCompatActivity {
                 isMatiz=true;
             }
             if(buffer.equals("ok")){
-                btStart10.setText("Двигатель запущен на 10 минут");
+                btStart10.setBackgroundResource(bt_empty_wide);
+                btStart10.setText("Двигатель запущен на 10 минут \n\n Остановить");
+                btStart15.setBackgroundResource(bt_empty);
                 btStart15.setText("Добавить 5 минут");
-                btStart20.setText("Остановить");
                 current_state=1;
                 isMatiz=true;
             }
             if(buffer.equals("er01")){
                 btStart10.setText("Двигатель не запустился");
                 btStart15.setText("15 мин");
-                btStart20.setText("20 мин");
                 current_state=0;
                 isMatiz=true;
             }
@@ -197,17 +218,24 @@ public class ActivityMain extends AppCompatActivity {
                 Toast.makeText(this,"Двигатель уже запущен",Toast.LENGTH_LONG).show();
                 btStart10.setText("Двигатель работает");
                 btStart15.setText("Добавить 5 минут");
-                btStart20.setText("Остановить");
                 current_state=1;
                 isMatiz=true;
             }
             if (isMatiz==false) return;
+
             numberSymbol2=txtMessage.indexOf(";",numberSymbol1+1);
             if (numberSymbol2==-1) return;
-            btParamText=txtMessage.substring(numberSymbol1+1,numberSymbol2);
-            buffer=txtMessage.substring(numberSymbol2+1,lenghtStr);
-            btParamText=btParamText+ "                        " + buffer;
-            btParam.setText(btParamText);
+
+            txtBat.setText(txtMessage.substring(numberSymbol1+1,numberSymbol2));
+
+            numberSymbol1=txtMessage.indexOf(";",numberSymbol2+1);
+            buffer=txtMessage.substring(numberSymbol2+1,numberSymbol1);
+            txtInside.setText(buffer);
+
+            numberSymbol2=txtMessage.indexOf(";",numberSymbol1+1);
+            buffer=txtMessage.substring(numberSymbol1+1,numberSymbol2);
+
+            txtEngine.setText(buffer);
         }
     }
 }

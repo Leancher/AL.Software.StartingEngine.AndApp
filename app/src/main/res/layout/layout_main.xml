@@ -12,72 +12,121 @@
 
     <!--Рисунок положить в папку drawable-->
 
-    <Button
-        android:id="@+id/btParam"
-        android:layout_width="340dp"
-        android:layout_height="102dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:background="@drawable/bt_param_wide"
-        android:gravity="bottom|center"
-        android:paddingBottom="20dp"
-        android:paddingLeft="50dp"
-        android:text="V                                 C"
-        android:textAlignment="textStart" />
+    <TextView
+        android:id="@+id/textBat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textEngine"
+        android:layout_alignBottom="@+id/textEngine"
+        android:layout_alignEnd="@+id/imageView4"
+        android:layout_alignStart="@+id/imageView4"
+        android:text="--"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="25sp" />
 
     <TextView
-        android:text="УПРАВЛЕНИЕ ДВИГАТЕЛЕМ"
-        android:layout_width="match_parent"
+        android:id="@+id/textInside"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:id="@+id/textView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        android:textSize="24sp"
+        android:layout_alignEnd="@+id/imageView5"
+        android:layout_alignStart="@+id/imageView5"
+        android:layout_below="@+id/imageView5"
+        android:text="--"
         android:textAlignment="center"
-        android:fontFamily="sans-serif"
-        android:typeface="normal"
-        android:textStyle="normal|bold" />
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/textEngine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/imageView3"
+        android:layout_alignStart="@+id/imageView3"
+        android:layout_below="@+id/imageView3"
+        android:text="--"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="25sp" />
 
     <Button
-        android:text="Запустить двигатель на 10 мин"
         android:layout_height="102dp"
         android:id="@+id/btStart10"
-        android:background="@drawable/bt_empty_wide"
-        android:layout_marginTop="35dp"
-        android:layout_centerHorizontal="true"
-        android:layout_width="340dp" />
+        android:background="@drawable/bt_start_10"
+        android:layout_width="340dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
 
     <Button
-        android:text="20 мин"
         android:layout_width="102dp"
-        android:layout_height="51dp"
-        android:id="@+id/btStart20"
-        android:background="@drawable/bt_empty_low"
-        android:layout_marginTop="150dp"
-        android:layout_marginLeft="236dp" />
-
-    <Button
-        android:text="15 мин"
-        android:layout_width="102dp"
-        android:layout_height="51dp"
+        android:layout_height="102dp"
         android:id="@+id/btStart15"
-        android:background="@drawable/bt_empty_low"
-        android:layout_marginTop="150dp" />
+        android:background="@drawable/bt_start_15"
+        android:layout_marginBottom="119dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/btUpdate"
+        android:layout_width="102dp"
+        android:layout_height="102dp"
+        android:background="@drawable/bt_update"
+        android:layout_alignBaseline="@+id/btStart15"
+        android:layout_alignBottom="@+id/btStart15"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="102dp"
+        android:layout_height="102dp"
+        android:id="@+id/btStartAuto"
+        android:background="@drawable/bt_auto_temp_off"
+        android:layout_alignBaseline="@+id/btUpdate"
+        android:layout_alignBottom="@+id/btUpdate"
+        android:layout_alignParentEnd="true" />
 
     <ImageView
         android:src="@drawable/pic_normal"
-        android:layout_height="180dp"
-        android:layout_width="180dp"
-        android:layout_above="@+id/btParam"
+        android:layout_height="120dp"
+        android:layout_width="120dp"
+        android:id="@+id/imageView"
+        android:layout_marginBottom="27dp"
+        android:layout_above="@+id/btUpdate"
         android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:src="@drawable/pic_battery"
+        android:layout_height="51dp"
+        android:layout_width="51dp"
+        android:id="@+id/imageView4"
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/btStart15" />
+
+    <ImageView
+        android:src="@drawable/pic_engine"
+        android:layout_height="51dp"
+        android:layout_width="51dp"
+        android:id="@+id/imageView3"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:src="@drawable/pic_inside"
+        android:layout_height="51dp"
+        android:layout_width="51dp"
+        android:id="@+id/imageView5"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="23dp" />
 
     <Button
         android:layout_height="51dp"
         android:id="@+id/btSet"
         android:background="@drawable/bt_set"
         android:layout_width="51dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="32dp"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_alignStart="@+id/textBat" />
 
     <Button
         android:layout_width="51dp"
@@ -86,6 +135,8 @@
         android:background="@drawable/bt_info"
         android:layout_alignBaseline="@+id/btSet"
         android:layout_alignBottom="@+id/btSet"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignStart="@+id/textInside" />
+
+
 
 </RelativeLayout>

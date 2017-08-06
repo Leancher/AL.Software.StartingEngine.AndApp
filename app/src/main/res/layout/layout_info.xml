@@ -56,7 +56,7 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Версия 1, 2016-2017"
+        android:text="Версия 1.1, 2016-2017"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:layout_below="@+id/textView4"
         android:layout_alignStart="@+id/textView4"
