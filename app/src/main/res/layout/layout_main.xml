@@ -20,7 +20,7 @@
         android:layout_alignBottom="@+id/textEngine"
         android:layout_alignEnd="@+id/imageView4"
         android:layout_alignStart="@+id/imageView4"
-        android:text="--"
+        android:text="@string/txtBat"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textSize="25sp" />
@@ -32,7 +32,7 @@
         android:layout_alignEnd="@+id/imageView5"
         android:layout_alignStart="@+id/imageView5"
         android:layout_below="@+id/imageView5"
-        android:text="--"
+        android:text="@string/txtInside"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textSize="25sp" />
@@ -44,7 +44,7 @@
         android:layout_alignEnd="@+id/imageView3"
         android:layout_alignStart="@+id/imageView3"
         android:layout_below="@+id/imageView3"
-        android:text="--"
+        android:text="@string/txtEngine"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textSize="25sp" />
@@ -85,13 +85,14 @@
         android:layout_alignParentEnd="true" />
 
     <ImageView
-        android:src="@drawable/pic_normal"
-        android:layout_height="120dp"
-        android:layout_width="120dp"
         android:id="@+id/imageView"
-        android:layout_marginBottom="27dp"
-        android:layout_above="@+id/btUpdate"
-        android:layout_centerHorizontal="true" />
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_below="@+id/textEngine"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:contentDescription="@string/pic_normal"
+        android:src="@drawable/pic_normal" />
 
     <ImageView
         android:src="@drawable/pic_battery"
@@ -100,7 +101,8 @@
         android:id="@+id/imageView4"
         android:layout_marginEnd="20dp"
         android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/btStart15" />
+        android:layout_alignEnd="@+id/btStart15"
+        android:contentDescription="@string/pic_battery" />
 
     <ImageView
         android:src="@drawable/pic_engine"
@@ -108,7 +110,8 @@
         android:layout_width="51dp"
         android:id="@+id/imageView3"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/pic_engine" />
 
     <ImageView
         android:src="@drawable/pic_inside"
@@ -117,7 +120,8 @@
         android:id="@+id/imageView5"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="23dp" />
+        android:layout_marginEnd="23dp"
+        android:contentDescription="@string/pic_inside" />
 
     <Button
         android:layout_height="51dp"

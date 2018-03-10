@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Matiz</string>
+    <string name="txtBat">--</string>
+    <string name="txtInside">--</string>
+    <string name="txtEngine">--</string>
+    <string name="pic_normal"></string>
+    <string name="pic_battery"></string>
+    <string name="pic_engine"></string>
+    <string name="pic_inside"></string>
 </resources>

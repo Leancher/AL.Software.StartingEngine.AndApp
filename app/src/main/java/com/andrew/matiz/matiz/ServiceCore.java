@@ -31,7 +31,7 @@ public class ServiceCore extends Service {
         super.onCreate();
         //Регистриуем Broadcast для приема СМС
         IntentFilter intFilt = new IntentFilter(SMS_RECEIVED);
-        intFilt.setPriority(100);
+        intFilt.setPriority(10);
         registerReceiver(receiverSMS, intFilt);
 
         //Регистрируем Broadcast для слежения за отправкой и доставкой СМС

@@ -55,6 +55,13 @@ public class ActivityMain extends AppCompatActivity {
 
         CheckButtonClick();
     }
+    private void ResetInterface(){
+        btStart10.setBackgroundResource(bt_start_10);
+        btStart10.setText("");
+        btStart15.setBackgroundResource(bt_start_15);
+        btStart15.setText("");
+        current_state=0;
+    }
     private void CheckButtonClick(){
         try {
         btUpdate.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +79,9 @@ public class ActivityMain extends AppCompatActivity {
                if (current_state==1){
                    SendCommand(COMMAND_STOP);
                }
+               if (current_state==3){
+                   SendCommand(COMMAND_START_10);
+               }
             }
         });
 
@@ -83,6 +93,9 @@ public class ActivityMain extends AppCompatActivity {
                 }
                 if (current_state==1){
                     SendCommand(COMMAND_ADD);
+                }
+                if (current_state==3){
+                    ResetInterface();
                 }
             }
         });
@@ -209,9 +222,11 @@ public class ActivityMain extends AppCompatActivity {
                 isMatiz=true;
             }
             if(buffer.equals("er01")){
-                btStart10.setText("Двигатель не запустился");
-                btStart15.setText("15 мин");
-                current_state=0;
+                btStart10.setBackgroundResource(bt_empty_wide);
+                btStart10.setText("Двигатель не запустился \n\n Попробовать еще раз");
+                btStart15.setBackgroundResource(bt_empty);
+                btStart15.setText("Отмена");
+                current_state=3;
                 isMatiz=true;
             }
             if(buffer.equals("er02")){
